@@ -1,0 +1,116 @@
+import { useEffect, useState } from 'react';
+import './App.css';
+import DetailBox from './DetailBox';
+import Header from './Header';
+import axios from "axios";
+function App() {
+  const [url, seturl] = useState("")
+  const [data, setdata] = useState("")
+  const [urlArray, seturlArray] = useState([])
+  //const [responseArray, setresponseArray] = useState([])
+
+  const [responseArray, setresponseArray] = useState([])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    //console.log(url)
+    console.log('PRE', urlArray);
+    seturlArray(urlArray =>
+      [...urlArray, url]
+    );
+    console.log('post', urlArray)
+
+    //await console.log(urlArray)
+    // localStorage.setItem('data', JSON.stringify(urlArray))
+
+  }
+  const checkStatus = (urlArray) => {
+    setresponseArray([])
+    console.log('Typeghikhik', urlArray)
+    urlArray.forEach((element, i) => {
+      const body = { url: element };
+      axios.post('http://localhost:8000/check', body)
+        .then(response => setresponseArray(responseArray => [...responseArray, response.data])).then(console.log(responseArray));
+    });
+  }
+
+  useEffect(() => {
+    localStorage.setItem('data', JSON.stringify(urlArray));
+
+    checkStatus(JSON.parse(localStorage.getItem("data")))
+    // urlArray.forEach(element => {
+    //   const body = { url: element };
+    //   axios.post('http://localhost:8000/check', body)
+    //     .then(response => console.log(response.data));
+    // });
+
+    // const body = { url: 'https://www.facebook.com' };
+    // axios.post('http://localhost:8000/check', body)
+    //     .then(response => console.log(response.data));
+
+  }, [urlArray]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkStatus(JSON.parse(localStorage.getItem("data")));
+    }, 900000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <div className="App">
+      <Header />
+      <hr />
+      <div className='app_search'>
+        <form onSubmit={handleSubmit}>
+          <input className='app_searchInput' type='text' value={url} onChange={e => { seturl(e.target.value) }} placeholder='Enter a url' />
+
+          <input type='submit' value='Add Website' className='app_searchButton'  ></input>
+        </form>
+      </div>
+      <button onClick={e => { test(e) }} >TEST BUTTON</button>
+      <div className='app_list'>
+        <p>WEBSITES</p>
+        {responseArray.map((website, index) => (
+          <div key={index}>
+            <DetailBox url={website.url} status={website.status} title={website.title} />
+          </div>
+        ))}
+
+      </div>
+    </div>
+  );
+}
+function useLocalStorage(key, initialValue) {
+  // State to store our value
+  // Pass initial state function to useState so logic is only executed once
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      // Get from local storage by key
+      const item = window.localStorage.getItem(key);
+      // Parse stored json or if none return initialValue
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      // If error also return initialValue
+      console.log(error);
+      return initialValue;
+    }
+  });
+  // Return a wrapped version of useState's setter function that ...
+  // ... persists the new value to localStorage.
+  const setValue = (value) => {
+    try {
+      // Allow value to be a function so we have same API as useState
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+      // Save state
+      setStoredValue(valueToStore);
+      // Save to local storage
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      // A more advanced implementation would handle the error case
+      console.log(error);
+    }
+  };
+  return [storedValue, setValue];
+}
+
+export default App;

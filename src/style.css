@@ -1,0 +1,88 @@
+.header {
+  padding: 15px 15px 10px 15px;
+  display: flex;
+  justify-content: space-between;
+}
+.header__logo {
+  margin-left: 30px;
+  font-weight: bold;
+  color: #00466e;
+}
+.header__counter {
+  color: #026b6e;
+  font-size: small;
+}
+.app_searchInput {
+  width: 70%;
+  height: 10px;
+  border: 0.5px solid lightgray;
+  border-radius: 5px;
+  padding: 15px 15px;
+  margin-left: 30px;
+  margin-top: 15px;
+}
+.app_searchButton {
+  padding: 15px 15px;
+  margin-left: 20px;
+  width: 18%;
+  height: 45px;
+  background-color: #00466e;
+  color: white;
+  font-size: x-small;
+  border: none;
+  border-radius: 5px;
+}
+.app_list {
+  margin-left: 30px;
+}
+.app_list > p {
+  font-weight: bold;
+  color: #00466e;
+  padding: 15px 15px 10px 0px;
+}
+.detailBox {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 15px 10px 0px;
+}
+.detailBox_title > p {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.detailBox_title > span {
+  font-size: small;
+  color: #00466e;
+}
+.detailBox__status {
+  margin-top: 15px;
+  display: flex;
+  padding: 15px 15px 0px 15px;
+  margin-right: 65px;
+}
+.detailBox__status > p {
+  font-size: x-small;
+  color: grey;
+  margin-top: 8px;
+  margin-right: 20px;
+  text-align: center;
+}
+.button_active {
+  height: 30px;
+  width: 70px;
+}
+.detailBox__line {
+  margin-right: 65px;
+  color: gray;
+}
+.Live {
+  background-color: green;
+  color: white;
+  padding: 10px 10px 10px 10px;
+  margin-top: 0px;
+}
+.Error {
+  background-color: red;
+  color: white;
+  padding: 10px 10px 10px 10px;
+  margin-top: 0px;
+}

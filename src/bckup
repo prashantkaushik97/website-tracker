@@ -1,0 +1,73 @@
+import { useEffect, useState } from 'react';
+import './App.css';
+import DetailBox from './DetailBox';
+import Header from './Header';
+import axios from "axios";
+function App() {
+  const [url, seturl] = useState("")
+  const [data, setdata] = useState("")
+  const [urlArray, seturlArray] = useState([])
+  const [responseArray, setresponseArray] = useState([])
+
+  //const [urlArray, seturlArray] = useState([JSON.parse(localStorage.getItem("data"))])
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    //console.log(url)
+    seturlArray(urlArray => [...urlArray, url]);
+    //await console.log(urlArray)
+    localStorage.setItem('data', JSON.stringify(urlArray))
+
+    //    document.getElementsByClassName('app_searchInput').value = ''
+  }
+  const checkStatus = (urlArray) => {
+    setresponseArray([])
+
+    urlArray.forEach((element, i) => {
+      const body = { url: element };
+      axios.post('http://localhost:8000/check', body)
+        .then(response => setresponseArray(responseArray => [...responseArray, response.data])).then(console.log(responseArray[i]));
+    });
+  }
+  const test = (e) => {
+    e.preventDefault()
+    const body = { url: 'https://www.facebook.comftuydftu' };
+
+    axios.post('http://localhost:8000/check', body)
+      .then(response => console.log(response.data));
+
+  }
+  useEffect(() => {
+
+    checkStatus(urlArray)
+    // urlArray.forEach(element => {
+    //   const body = { url: element };
+    //   axios.post('http://localhost:8000/check', body)
+    //     .then(response => console.log(response.data));
+    // });
+
+    // const body = { url: 'https://www.facebook.com' };
+    // axios.post('http://localhost:8000/check', body)
+    //     .then(response => console.log(response.data));
+
+  }, [urlArray]);
+  return (
+    <div className="App">
+      <Header />
+      <hr />
+      <div className='app_search'>
+        <form onSubmit={handleSubmit}>
+          <input className='app_searchInput' type='text' value={url} onChange={e => { seturl(e.target.value) }} placeholder='Enter a url' />
+
+          <input type='submit' value='Add Website' className='app_searchButton'  ></input>
+        </form>
+      </div>
+      <button onClick={e => { test(e) }} >TEST BUTTON</button>
+      <div className='app_list'>
+        <p>WEBSITES</p>
+        <DetailBox url='google.com' />
+      </div>
+    </div>
+  );
+}
+
+export default App;
