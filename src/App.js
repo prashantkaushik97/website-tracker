@@ -14,26 +14,19 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setflag(!flag)
-    console.log('PRE', urlArray);
-
-    console.log('post', urlArray)
-
-  }
-
-  const test = async (e) => {
-
-    e.preventDefault()
     console.log('PRE', url);
-    await localStorage.setItem(url, moment().format('h:mm:ss'));
+    await localStorage.setItem(url, moment().format("hh:mm"));
     setflag(!flag)
-
   }
   const checkStatus = (urlArray) => {
     setresponseArray([])
 
     Object.keys(localStorage).forEach(element => {
       let res = {}
+      if ('http' != element.substring(0, 4)) {
+
+        element = 'https://' + element
+      }
       const body = { url: element };
       console.log(element)
       axios.post('http://localhost:8000/check', body)
@@ -42,6 +35,7 @@ function App() {
           res.url = element
           res.status = response.data.status
           res.title = response.data.title
+          res.time = moment().format("hh:mm")
           setresponseArray(responseArray => [...responseArray, res])
         }
 
@@ -82,12 +76,11 @@ function App() {
           <input type='submit' value='Add Website' className='app_searchButton'  ></input>
         </form>
       </div>
-      <button onClick={e => { test(e) }} >TEST BUTTON</button>
       <div className='app_list'>
         <p>WEBSITES</p>
         {responseArray.map((website, index) => (
           <div key={index}>
-            <DetailBox url={website.url} status={website.status} title={website.title} />
+            <DetailBox url={website.url} status={website.status} title={website.title} time={website.time} />
           </div>
         ))}
 

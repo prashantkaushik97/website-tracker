@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import moment from "moment"
 
-function DetailBox({ url, title, status }) {
-    const [minutes, setMinutes] = useState(0);
+function DetailBox({ url, title, status, time }) {
+    const [minutes, setMinutes] = useState();
 
     useEffect(() => {
-        if (minutes >= 0) {
-            setTimeout(() => setMinutes(minutes + 1), 60000);
-        } else {
-            setMinutes('BOOOOM!');
-        }
+        var currentTime = moment(new Date())
+        var duration = moment.duration(currentTime.diff(time));
+        // moment("8:32 AM", 'h:mm A').diff('hours', 2).format('h:mm A')
+
+        setMinutes(parseInt(duration.asHours()))
     });
     return (
         <div>
@@ -18,7 +19,7 @@ function DetailBox({ url, title, status }) {
                     <span>{url}</span>
                 </div>
                 <div className='detailBox__status'>
-                    <p> Last updated {minutes} minutes ago</p>
+                    <p> Last updated {time} minutes ago</p>
                     <div className={status}> {status}</div>
                 </div>
             </div>
