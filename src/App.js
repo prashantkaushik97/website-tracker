@@ -35,7 +35,7 @@ function App() {
           res.url = element
           res.status = response.data.status
           res.title = response.data.title
-          res.time = moment().format("hh:mm")
+          res.time = moment().format()
           setresponseArray(responseArray => [...responseArray, res])
         }
 

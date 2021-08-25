@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import moment from "moment"
 
 function DetailBox({ url, title, status, time }) {
-    const [minutes, setMinutes] = useState();
-
+    const [minutes, setMinutes] = useState(0);
     useEffect(() => {
-        var currentTime = moment(new Date())
-        var duration = moment.duration(currentTime.diff(time));
-        // moment("8:32 AM", 'h:mm A').diff('hours', 2).format('h:mm A')
+        const interval = setInterval(() => {
+            var currentTime = moment(new Date())
+            var duration = moment.duration(currentTime.diff(time));
+            setMinutes(parseInt(duration.asMinutes()))
+        }, 60000);
+        return () => clearInterval(interval);
+    }, []);
 
-        setMinutes(parseInt(duration.asHours()))
-    });
     return (
         <div>
             <div className='detailBox'>
@@ -19,7 +20,7 @@ function DetailBox({ url, title, status, time }) {
                     <span>{url}</span>
                 </div>
                 <div className='detailBox__status'>
-                    <p> Last updated {time} minutes ago</p>
+                    <p> Last updated {minutes} minutes ago</p>
                     <div className={status}> {status}</div>
                 </div>
             </div>
