@@ -6,20 +6,25 @@ import axios from "axios";
 import moment from "moment"
 function App() {
   const [url, seturl] = useState("")
-  const [data, setdata] = useState([])
-  const [urlArray, seturlArray] = useState([])
+
   const [flag, setflag] = useState(true)
 
   const [responseArray, setresponseArray] = useState([])
 
   const handleSubmit = async (e) => {
+
+
     e.preventDefault()
     console.log('PRE', url);
     await localStorage.setItem(url, moment().format("hh:mm"));
+    //  document.getElementsByClassName('input').defaultValue = '';
+
     setflag(!flag)
+
   }
-  const checkStatus = (urlArray) => {
+  const checkStatus = () => {
     setresponseArray([])
+
 
     Object.keys(localStorage).forEach(element => {
       let res = {}
@@ -38,23 +43,9 @@ function App() {
           res.time = moment().format()
           setresponseArray(responseArray => [...responseArray, res])
         }
-
         )
     });
-
   }
-
-  useEffect(() => {
-    seturlArray([])
-    var keys = Object.keys(localStorage)
-    keys.forEach(url => {
-      seturlArray(urlArray => [...urlArray, url])
-
-    })
-
-
-
-  }, [flag]);
   useEffect(() => {
     checkStatus()
   }, [flag])
